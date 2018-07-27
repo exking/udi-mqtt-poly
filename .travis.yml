@@ -1,0 +1,11 @@
+language:
+- python
+python:
+- '3.6'
+before_install:
+- sudo apt-get install -y libow-dev
+script:
+- "./ow-poly.py"
+notifications:
+  slack:
+    secure: mm+oGy7Nsr8fR+VExGM/0cQkXgUtC5h8ptxkY1ICO4J9ddeRn/SXDHmPStJ19lQ/HUgTHtZcSRiU0CulH6C36QQEyClzAhjLbA2VSwbLhJec3A1UTHa6bDRHGUzGO2ij9v4iqDyh/tHCPt2LrdKA2NBhgW+tv/LT50fKAUwq/GDF6lyDbsESN/J7j/R/S1LR5T1y3zNOFu6gnYxPfqtlzc9208b6sGPuDqT34wL1N+bQXT8fNxfzqGg78TrfbS6l0zfGn/zkmqq2jgX1bFOiYyM58V/wVdm6vzuCdgIiUqPKdJSgo2n5iKJlkC5Yo46/dJiCTip9VFWEpZl8Tc4smzlms33CBLnsSP7cIprnzgkaq2UsZMInv5uSl4CTGmPk/CaKHTu2xx5arN8s6Amu3fMMhQy4scl5pC5g9ENRQRx4bD6WCWfx2psRH487MqiqCM4pOIYYkEhpWqaLGYZRlvSuTHNNZJy/ufzX/NNOH9h3IAmiUguFKJsfL5vuiwX/XWzfs2OH6f2y4PQUZxs3VFtsD9SFOgF2STvBKwtjW2gScLlLJB0vWFcLkFpSIVo2GA4YDMseuPcN0Udgs2nITMgPbAQ7gcX6az/e2CIhIz/9JRDaqt+TiA40hlPqW3vcLG9Ijq3zzAVnSCqMSF+ccrUJus+d9i88mhNed+J7JC4=

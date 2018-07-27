@@ -1,0 +1,31 @@
+<nodeDefs>
+    <nodeDef id="MQCTRL" nls="CTRL">
+        <editors />
+        <sts>
+            <st id="ST" editor="BOOL" />
+        </sts>
+        <cmds>
+            <sends />
+            <accepts>
+                <cmd id="DISCOVER" />
+            </accepts>
+        </cmds>
+    </nodeDef>
+    <nodeDef id="MQSW" nls="SWITCH">
+        <editors />
+        <sts>
+            <st id="ST" editor="ONOFF" />
+        </sts>
+        <cmds>
+            <sends>
+	    	<cmd id="DON" />
+	    	<cmd id="DOF" />
+            </sends>
+            <accepts>
+                <cmd id="QUERY" />
+                <cmd id="DON" />
+                <cmd id="DOF" />
+            </accepts>
+        </cmds>
+    </nodeDef>
+</nodeDefs>

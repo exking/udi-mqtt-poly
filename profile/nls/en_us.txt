@@ -1,0 +1,10 @@
+# controller
+ND-MQCTRL-NAME = MQTT Controller
+ND-MQCTRL-ICON = GenericCtl
+CMD-CTRL-DISCOVER-NAME = Re-Discover
+ST-CTRL-ST-NAME = NodeServer Online
+
+# switch
+ND-MQSW-NAME = MQTT Switch
+ND-MQSW-ICON = GenericRsp
+ST-SWITCH-ST-NAME = Status
