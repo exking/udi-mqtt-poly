@@ -8,3 +8,33 @@ ST-CTRL-ST-NAME = NodeServer Online
 ND-MQSW-NAME = MQTT Switch
 ND-MQSW-ICON = GenericRsp
 ST-SWITCH-ST-NAME = Status
+
+CMD-SWITCH-DON-NAME = On
+CMD-SWITCH-DOF-NAME = Off
+
+# sensor
+ND-MQSENS-NAME = MQTT Sensor
+ND-MQSENS-ICON = MotionSensor
+ST-SENSOR-ST-NAME = Motion detected
+ST-SENSOR-CLITEMP-NAME = Temperature
+ST-SENSOR-CLIHUM-NAME = Humidity
+ST-SENSOR-GPV-NAME = Heat Index
+ST-SENSOR-LUMIN-NAME = Light level
+ST-SENSOR-GV0-NAME = LED
+ST-SENSOR-GV1-NAME = LED Brightness
+ST-SENSOR-GV2-NAME = LED Color Red
+ST-SENSOR-GV3-NAME = LED Color Green
+ST-SENSOR-GV4-NAME = LED Color Blue
+
+CMD-SENSOR-DON-NAME = LED On
+CMD-SENSOR-DOF-NAME = LED Off
+CMD-SENSOR-SETLED-NAME = LED State
+
+CMDP-R-NAME = Red
+CMDP-G-NAME = Green
+CMDP-B-NAME = Blue
+CMDP-I-NAME = Brightness
+CMDP-F-NAME = Flash
+CMDP-D-NAME = Transition
+
+PGM-CMD-SETLED-FMT = /R// Red ${v}/ /G// Green ${v}/ /B// Blue ${v}/ /I// Brightness ${v}/ /D// in ${v}/ /F//, flash for ${v}/

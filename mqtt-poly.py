@@ -65,6 +65,11 @@ class Controller(polyinterface.Controller):
                     LOGGER.info('Adding {} {}'.format(dev['type'], name))
                     self.addNode(MQSwitch(self, self.address, address, name, dev))
                     self.status_topics.append(dev['status_topic'])
+            elif dev['type'] == 'sensor':
+                if not address is self.nodes:
+                    LOGGER.info('Adding {} {}'.format(dev['type'], name))
+                    self.addNode(MQSensor(self, self.address, address, name, dev))
+                    self.status_topics.append(dev['status_topic'])
             else:
                 LOGGER.error('Device type {} is not yet supported'.format(dev['type']))
         LOGGER.info('Done adding nodes, connecting to MQTT broker...')
@@ -188,6 +193,119 @@ class MQSwitch(polyinterface.Node):
 
     commands = {
             'QUERY': query, 'DON': set_on, 'DOF': set_off
+               }
+
+
+class MQSensor(polyinterface.Node):
+    def __init__(self, controller, primary, address, name, device):
+        super().__init__(controller, primary, address, name)
+        self.cmd_topic = device['cmd_topic']
+        self.on = False
+        self.motion = False
+
+    def start(self):
+        pass
+
+    def updateInfo(self, payload):
+        try:
+            data = json.loads(payload)
+        except Exception as ex:
+            LOGGER.error('Failed to parse MQTT Payload as Json: {} {}'.format(ex, payload))
+            return False
+
+        # motion detector
+        if 'motion' in data:
+            if data['motion'] == 'standby':
+                self.setDriver('ST', 0)
+                if self.motion:
+                    self.motion = False
+                    self.reportCmd('DOF')
+            else:
+                self.setDriver('ST', 1)
+                if not self.motion:
+                    self.motion = True
+                    self.reportCmd('DON')
+        else:
+            self.setDriver('ST', 0)
+        # temperature
+        if 'temperature' in data:
+            self.setDriver('CLITEMP', data['temperature'])
+        # heatIndex
+        if 'heatIndex' in data:
+            self.setDriver('GPV', data['heatIndex'])
+        # humidity
+        if 'humidity' in data:
+            self.setDriver('CLIHUM', data['humidity'])
+        # light detecor reading
+        if 'ldr' in data:
+            self.setDriver('LUMIN', data['ldr'])
+        # LED
+        if 'state' in data:
+            # LED is present
+            if data['state'] == 'ON':
+                self.setDriver('GV0', 100)
+            else:
+                self.setDriver('GV0', 0)
+            if 'brightness' in data:
+                self.setDriver('GV1', data['brightness'])
+            if 'color' in data:
+                if 'r' in data['color']:
+                    self.setDriver('GV2', data['color']['r'])
+                if 'g' in data['color']:
+                    self.setDriver('GV3', data['color']['g'])
+                if 'b' in data['color']:
+                    self.setDriver('GV4', data['color']['b'])
+
+
+    def led_on(self, command):
+        self.controller.mqtt_pub(self.cmd_topic, json.dumps({'state': 'ON'}))
+
+    def led_off(self, command):
+        self.controller.mqtt_pub(self.cmd_topic, json.dumps({'state': 'OFF'}))
+
+    def led_set(self, command):
+        query = command.get('query')
+        red = self._check_limit(int(query.get('R.uom100')))
+        green = self._check_limit(int(query.get('G.uom100')))
+        blue = self._check_limit(int(query.get('B.uom100')))
+        brightness = self._check_limit(int(query.get('I.uom100')))
+        transition = int(query.get('D.uom58'))
+        flash = int(query.get('F.uom58'))
+        cmd = { 'state': 'ON', 'brightness': brightness, 'color': {'r': red, 'g': green, 'b': blue } }
+        if transition > 0:
+            cmd['transition'] = transition
+        if flash > 0:
+            cmd['flash'] = flash
+
+        self.controller.mqtt_pub(self.cmd_topic, json.dumps(cmd))
+
+    def _check_limit(self, value):
+        if value > 255:
+            return 255
+        elif value < 0:
+            return 0
+        else:
+            return value
+
+    def query(self, command=None):
+        self.reportDrivers()
+
+    drivers = [{'driver': 'ST', 'value': 0, 'uom': 2},
+               {'driver': 'CLITEMP', 'value': 0, 'uom': 17},
+               {'driver': 'GPV', 'value': 0, 'uom': 17},
+               {'driver': 'CLIHUM', 'value': 0, 'uom': 22},
+               {'driver': 'LUMIN', 'value': 0, 'uom': 36},
+               {'driver': 'GV0', 'value': 0, 'uom': 78},
+               {'driver': 'GV1', 'value': 0, 'uom': 100},
+               {'driver': 'GV2', 'value': 0, 'uom': 100},
+               {'driver': 'GV3', 'value': 0, 'uom': 100},
+               {'driver': 'GV4', 'value': 0, 'uom': 100}
+              ]
+
+    id = 'MQSENS'
+
+    commands = {
+            'QUERY': query, 'DON': led_on, 'DOF': led_off, 'SETLED': led_set
                }
 
 

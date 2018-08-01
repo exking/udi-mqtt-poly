@@ -28,4 +28,38 @@
             </accepts>
         </cmds>
     </nodeDef>
+    <nodeDef id="MQSENS" nls="SENSOR">
+        <editors />
+        <sts>
+            <st id="ST" editor="BOOL" />
+            <st id="CLITEMP" editor="TEMPF" />
+            <st id="GPV" editor="TEMPF" />
+            <st id="CLIHUM" editor="HUM" />
+            <st id="LUMIN" editor="LIGHT" />
+            <st id="GV0" editor="ONOFF" />
+            <st id="GV1" editor="LEDCLR" />
+            <st id="GV2" editor="LEDCLR" />
+            <st id="GV3" editor="LEDCLR" />
+            <st id="GV4" editor="LEDCLR" />
+        </sts>
+        <cmds>
+            <sends>
+                <cmd id="DON" />
+                <cmd id="DOF" />
+            </sends>
+            <accepts>
+                <cmd id="QUERY" />
+                <cmd id="DON" />
+                <cmd id="DOF" />
+                <cmd id="SETLED">
+                    <p id="I" editor="LEDCLR" init="GV1" />
+                    <p id="R" editor="LEDCLR" init="GV2" />
+                    <p id="G" editor="LEDCLR" init="GV3" />
+                    <p id="B" editor="LEDCLR" init="GV4" />
+                    <p id="D" editor="SECOND" />
+                    <p id="F" editor="SECOND" />
+                </cmd>
+            </accepts>
+        </cmds>
+    </nodeDef>
 </nodeDefs>
