@@ -143,7 +143,7 @@ class Controller(polyinterface.Controller):
         for node in self.nodes:
             self.nodes[node].reportDrivers()
 
-    def discover(self):
+    def discover(self, command=None):
         pass
 
     id = 'MQCTRL'
