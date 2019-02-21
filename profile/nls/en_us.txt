@@ -38,3 +38,30 @@ CMDP-F-NAME = Flash
 CMDP-D-NAME = Transition
 
 PGM-CMD-SETLED-FMT = /R// Red ${v}/ /G// Green ${v}/ /B// Blue ${v}/ /I// Brightness ${v}/ /D// in ${v}/ /F//, flash for ${v}/
+
+# am2301
+ND-MQDHT-NAME = MQTT AM2301
+ND-MQDHT-ICON = TempSensor
+ST-DHT-CLITEMP-NAME = Temperature
+ST-DHT-CLIHUM-NAME = Humidity
+ST-DHT-ST-NAME = Status
+
+# bme280
+ND-MQBME-NAME = MQTT BME
+ND-MQBME-ICON = TempSensor
+ST-BME-CLITEMP-NAME = Temperature
+ST-BME-CLIHUM-NAME = Humidity
+ST-BME-BARPRES-Name = Pressure
+ST-BME-ST-NAME = Status
+
+# SR04
+ND-MQHCSR-NAME = MQTT AM2301
+ND-MQHCSR-ICON = Input
+ST-SR04-DISTANC-NAME = Distance
+ST-SR04-ST-NAME = Status
+
+# analog
+ND-MQANAL-NAME = MQTT Analog
+ND-MQANAL-ICON = Input
+ST-ANALOG-GPV-NAME = Analog Input
+ST-ANALOG-ST-NAME = Status
