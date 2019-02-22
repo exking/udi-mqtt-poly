@@ -12,7 +12,7 @@
         {
             "title": "NodeServer to integrate with MQTT Broker",
             "author": "xKing",
-            "version": "0.0.2",
+            "version": "0.0.3",
             "date": "July 27, 2018",
             "source": "https://github.com/exking/udi-mqtt-poly",
             "license": "https://raw.githubusercontent.com/exking/udi-mqtt-poly/master/LICENSE"
