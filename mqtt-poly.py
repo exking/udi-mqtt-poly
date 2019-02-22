@@ -70,6 +70,26 @@ class Controller(polyinterface.Controller):
                     LOGGER.info('Adding {} {}'.format(dev['type'], name))
                     self.addNode(MQSensor(self, self.address, address, name, dev))
                     self.status_topics.append(dev['status_topic'])
+            elif dev['type'] == 'TempHumid':
+                if not address is self.nodes:
+                    LOGGER.info('Adding {} {}'.format(dev['type'], name))
+                    self.addNode(MQdht(self, self.address, address, name, dev))
+                    self.status_topics.append(dev['status_topic'])
+            elif dev['type'] == 'TempHumidPress':
+                if not address is self.nodes:
+                    LOGGER.info('Adding {} {}'.format(dev['type'], name))
+                    self.addNode(MQbme(self, self.address, address, name, dev))
+                    self.status_topics.append(dev['status_topic'])
+            elif dev['type'] == 'distance':
+                if not address is self.nodes:
+                    LOGGER.info('Adding {} {}'.format(dev['type'], name))
+                    self.addNode(MQhcsr(self, self.address, address, name, dev))
+                    self.status_topics.append(dev['status_topic'])
+            elif dev['type'] == 'analog':
+                if not address is self.nodes:
+                    LOGGER.info('Adding {} {}'.format(dev['type'], name))
+                    self.addNode(MQAnalog(self, self.address, address, name, dev))
+                    self.status_topics.append(dev['status_topic'])
             else:
                 LOGGER.error('Device type {} is not yet supported'.format(dev['type']))
         LOGGER.info('Done adding nodes, connecting to MQTT broker...')
@@ -306,6 +326,165 @@ class MQSensor(polyinterface.Node):
 
     commands = {
             'QUERY': query, 'DON': led_on, 'DOF': led_off, 'SETLED': led_set
+               }
+
+
+# This class is an attempt to add support for temperature/humidity sensors.
+# It was originally developed with a DHT22, but should work with
+# any of the following, since they I believe they get identified by tomaso the same:
+# DHT21, AM2301, AM2302, AM2321
+# Should be easy to add other temp/humdity sensors.
+class MQdht(polyinterface.Node):
+    def __init__(self, controller, primary, address, name, device):
+        super().__init__(controller, primary, address, name)
+        self.on = False
+
+    def start(self):
+        pass
+
+    def updateInfo(self, payload):
+        try:
+            data = json.loads(payload)
+        except Exception as ex:
+            LOGGER.error('Failed to parse MQTT Payload as Json: {} {}'.format(ex, payload))
+            return False
+        if 'AM2301' in data:
+            self.setDriver('ST', 1)
+            self.setDriver('CLITEMP', data['AM2301']['Temperature'])
+            self.setDriver('CLIHUM', data['AM2301']['Humidity'])
+        else:
+            self.setDriver('ST', 0)
+
+    def query(self, command=None):
+        self.reportDrivers()
+
+    drivers = [{'driver': 'ST', 'value': 0, 'uom': 2},
+               {'driver': 'CLITEMP', 'value': 0, 'uom': 17},
+               {'driver': 'CLIHUM', 'value': 0, 'uom': 22}
+              ]
+
+    id = 'MQDHT'
+
+    commands = {
+            'QUERY': query
+               }
+
+# This class is an attempt to add support for temperature/humidity/pressure sensors.
+# Currently supports the BME280.  Could be extended to accept others.
+class MQbme(polyinterface.Node):
+    def __init__(self, controller, primary, address, name, device):
+        super().__init__(controller, primary, address, name)
+        self.on = False
+
+    def start(self):
+        pass
+
+    def updateInfo(self, payload):
+        try:
+            data = json.loads(payload)
+        except Exception as ex:
+            LOGGER.error('Failed to parse MQTT Payload as Json: {} {}'.format(ex, payload))
+            return False
+        if 'BME280' in data:
+            self.setDriver('ST', 1)
+            self.setDriver('CLITEMP', data['BME280']['Temperature'])
+            self.setDriver('CLIHUM', data['BME280']['Humidity'])
+            # Converting to "Hg, could do this in sonoff-tomasto
+            # or just report the raw hPA (or convert to kPA).
+            press = format(round(float('.02952998751') * float(data['BME280']['Pressure']),2))
+            self.setDriver('BARPRES', press)
+        else:
+            self.setDriver('ST', 0)
+
+    def query(self, command=None):
+        self.reportDrivers()
+
+    drivers = [{'driver': 'ST', 'value': 0, 'uom': 2},
+               {'driver': 'CLITEMP', 'value': 0, 'uom': 17},
+               {'driver': 'CLIHUM', 'value': 0, 'uom': 22},
+               {'driver': 'BARPRES', 'value': 0, 'uom': 23}
+              ]
+
+    id = 'MQBME'
+
+    commands = {
+            'QUERY': query
+               }
+
+
+# This class is an attempt to add support for HC-SR04 Ultrasonic Sensor.
+# Returns distance in centimeters.
+class MQhcsr(polyinterface.Node):
+    def __init__(self, controller, primary, address, name, device):
+        super().__init__(controller, primary, address, name)
+        self.on = False
+
+    def start(self):
+        pass
+
+    def updateInfo(self, payload):
+        try:
+            data = json.loads(payload)
+        except Exception as ex:
+            LOGGER.error('Failed to parse MQTT Payload as Json: {} {}'.format(ex, payload))
+            return False
+        if 'SR04' in data:
+            self.setDriver('ST', 1)
+            self.setDriver('DISTANC', data['SR04']['Distance'])
+        else:
+            self.setDriver('ST', 0)
+            self.setDriver('DISTANC', 0)
+
+    def query(self, command=None):
+        self.reportDrivers()
+
+    drivers = [{'driver': 'ST', 'value': 0, 'uom': 2},
+               {'driver': 'DISTANC', 'value': 0, 'uom': 5}
+              ]
+
+    id = 'MQHCSR'
+
+    commands = {
+            'QUERY': query
+               }
+
+# General purpose Analog input using ADC.
+# Setting max value in editor.xml as 1024, as that would be the max for 
+# onboard ADC, but that might need to be changed for external ADCs.
+class MQAnalog(polyinterface.Node):
+    def __init__(self, controller, primary, address, name, device):
+        super().__init__(controller, primary, address, name)
+        self.on = False
+
+    def start(self):
+        pass
+
+    def updateInfo(self, payload):
+        try:
+            data = json.loads(payload)
+        except Exception as ex:
+            LOGGER.error('Failed to parse MQTT Payload as Json: {} {}'.format(ex, payload))
+            return False
+        if  'ANALOG' in data:
+            self.setDriver('ST', 1)
+            self.setDriver('GPV', data['ANALOG']['A0'])
+        else:
+            self.setDriver('ST', 0)
+            self.setDriver('GPV', 0)
+
+    def query(self, command=None):
+        self.reportDrivers()
+
+# GPV = "General Purpose Value"
+# UOM:56 = "The raw value reported by device"
+    drivers = [{'driver': 'ST', 'value': 0, 'uom': 2},
+               {'driver': 'GPV', 'value': 0, 'uom': 56}
+              ]
+
+    id = 'MQANAL'
+
+    commands = {
+            'QUERY': query
                }
 
 

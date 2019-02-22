@@ -62,4 +62,59 @@
             </accepts>
         </cmds>
     </nodeDef>
+    <nodeDef id="MQDHT" nls="DHT">
+        <editors />
+        <sts>
+            <st id="ST" editor="BOOL" />
+            <st id="CLITEMP" editor="TEMPF" />
+            <st id="CLIHUM" editor="HUM" />
+        </sts>
+	<cmds>
+	    <sends />
+            <accepts>
+                <cmd id="QUERY" />
+            </accepts>
+        </cmds>
+    </nodeDef>
+    <nodeDef id="MQBME" nls="BME">
+        <editors />
+        <sts>
+            <st id="ST" editor="BOOL" />
+            <st id="CLITEMP" editor="TEMPF" />
+            <st id="CLIHUM" editor="HUM" />
+            <st id="BARPRES" editor="PRESS" />
+        </sts>
+        <cmds>
+            <sends />
+            <accepts>
+                <cmd id="QUERY" />
+            </accepts>
+        </cmds>
+    </nodeDef>
+    <nodeDef id="MQHCSR" nls="SR04">
+        <editors />
+        <sts>
+            <st id="ST" editor="BOOL" />
+            <st id="DISTANC" editor="DIST" />
+        </sts>
+        <cmds>
+            <sends />
+            <accepts>
+                <cmd id="QUERY" />
+            </accepts>
+        </cmds>
+    </nodeDef>
+    <nodeDef id="MQANAL" nls="ANALOG">
+        <editors />
+        <sts>
+            <st id="ST" editor="BOOL" />
+            <st id="GPV" editor="VALUE" />
+        </sts>
+        <cmds>
+            <sends />
+            <accepts>
+                <cmd id="QUERY" />
+            </accepts>
+        </cmds>
+    </nodeDef>
 </nodeDefs>
