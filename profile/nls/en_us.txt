@@ -65,3 +65,13 @@ ND-MQANAL-NAME = MQTT Analog
 ND-MQANAL-ICON = Input
 ST-ANALOG-GPV-NAME = Analog Input
 ST-ANALOG-ST-NAME = Status
+
+# s31
+ND-MQS31-NAME = MQTT S31 Energy
+ND-MQS31-ICON = EnergyMonitor
+ST-S31-CURRENT-NAME = Current
+ST-S31-CURPOW-NAME = Current Power
+ST-S31-VOLT-NAME = Voltage
+ST-S31-FACTOR-NAME = Power Factor
+ST-S31-TOTPOW-NAME = Total Power
+ST-S31-ST-NAME = Status

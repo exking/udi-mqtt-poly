@@ -117,4 +117,21 @@
             </accepts>
         </cmds>
     </nodeDef>
+    <nodeDef id="MQS31" nls="S31">
+        <editors />
+        <sts>
+            <st id="ST" editor="BOOL" />
+            <st id="CC" editor="CURRENT" />
+            <st id="CPW" editor="CURPOW" />
+            <st id="CV" editor="VOLT" />
+            <st id="PF" editor="FACTOR" />
+            <st id="TPW" editor="TOTPOW" />
+        </sts>
+        <cmds>
+            <sends />
+            <accepts>
+                <cmd id="QUERY" />
+            </accepts>
+        </cmds>
+    </nodeDef>
 </nodeDefs>
