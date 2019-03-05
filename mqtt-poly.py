@@ -90,6 +90,11 @@ class Controller(polyinterface.Controller):
                     LOGGER.info('Adding {} {}'.format(dev['type'], name))
                     self.addNode(MQAnalog(self, self.address, address, name, dev))
                     self.status_topics.append(dev['status_topic'])
+            elif dev['type'] == 's31':
+                if not address is self.nodes:
+                    LOGGER.info('Adding {} {}'.format(dev['type'], name))
+                    self.addNode(MQs31(self, self.address, address, name, dev))
+                    self.status_topics.append(dev['status_topic'])
             else:
                 LOGGER.error('Device type {} is not yet supported'.format(dev['type']))
         LOGGER.info('Done adding nodes, connecting to MQTT broker...')
@@ -486,6 +491,49 @@ class MQAnalog(polyinterface.Node):
     commands = {
             'QUERY': query
                }
+
+# Reading the telemetry data for a Sonoff S31 (use the switch for control)
+class MQs31(polyinterface.Node):
+    def __init__(self, controller, primary, address, name, device):
+        super().__init__(controller, primary, address, name)
+        self.on = False
+
+    def start(self):
+        pass
+
+    def updateInfo(self, payload):
+        try:
+            data = json.loads(payload)
+        except Exception as ex:
+            LOGGER.error('Failed to parse MQTT Payload as Json: {} {}'.format(ex, payload))
+            return False
+        if  'ENERGY' in data:
+            self.setDriver('ST', 1)
+            self.setDriver('CC', data['ENERGY']['Current'])
+            self.setDriver('CPW', data['ENERGY']['Power'])
+            self.setDriver('CV', data['ENERGY']['Voltage'])
+            self.setDriver('PF', data['ENERGY']['Factor'])
+            self.setDriver('TPW', data['ENERGY']['Total'])
+        else:
+            self.setDriver('ST', 0)
+
+    def query(self, command=None):
+        self.reportDrivers()
+
+    drivers = [{'driver': 'ST', 'value': 0, 'uom': 2},
+               {'driver': 'CC', 'value': 0, 'uom': 1},
+               {'driver': 'CPW', 'value': 0, 'uom': 73},
+               {'driver': 'CV', 'value': 0, 'uom': 72},
+               {'driver': 'PF', 'value': 0, 'uom': 53},
+               {'driver': 'TPW', 'value': 0, 'uom': 33}
+              ]
+
+    id = 'MQS31'
+
+    commands = {
+            'QUERY': query
+               }
+
 
 
 if __name__ == "__main__":
