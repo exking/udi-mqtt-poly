@@ -5,6 +5,7 @@ import sys
 import logging
 import paho.mqtt.client as mqtt
 import json
+import yaml
 
 LOGGER = polyinterface.LOGGER
 
@@ -36,16 +37,36 @@ class Controller(polyinterface.Controller):
         if 'mqtt_password' not in self.polyConfig['customParams']:
             LOGGER.error('mqtt_password must be configured')
             return False
-        if 'devlist' not in self.polyConfig['customParams']:
-            LOGGER.error('devlist must be configured')
-            return False
 
         self.mqtt_user = self.polyConfig['customParams']['mqtt_user']
         self.mqtt_password = self.polyConfig['customParams']['mqtt_password']
-        try:
-            self.devlist = json.loads(self.polyConfig['customParams']['devlist'])
-        except Exception as ex:
-            LOGGER.error('Failed to parse the devlist: {}'.format(ex))
+
+        if 'devfile' in self.polyConfig['customParams']:
+            try:
+                f = open(self.polyConfig['customParams']['devfile'])
+            except Exception as ex:
+                LOGGER.error('Failed to open {}: {}'.format(self.polyConfig['customParams']['devfile'], ex))
+                return False
+            try:
+                data = yaml.safe_load(f.read())
+                f.close()
+            except Exception as ex:
+                LOGGER.error('Failed to parse {} content: {}'.format(self.polyConfig['customParams']['devfile'], ex))
+                return False
+
+            if 'devices' not in data:
+                LOGGER.error('Manual discovery file {} is missing bulbs section'.format(self.polyConfig['customParams']['devfile']))
+                return False
+            self.devlist = data['devices']
+
+        elif 'devlist' in self.polyConfig['customParams']:
+            try:
+                self.devlist = json.loads(self.polyConfig['customParams']['devlist'])
+            except Exception as ex:
+                LOGGER.error('Failed to parse the devlist: {}'.format(ex))
+                return False
+        else:
+            LOGGER.error('devlist must be configured')
             return False
 
         self.mqttc = mqtt.Client()

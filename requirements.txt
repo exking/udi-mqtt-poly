@@ -1,1 +1,2 @@
-polyinterface>=2.0.29
+polyinterface>=2.1.0
+pyyaml>=5.3.1

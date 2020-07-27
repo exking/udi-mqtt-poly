@@ -17,6 +17,7 @@ Note - your Sonoff MUST run the [Sonoff-Tasmota](https://github.com/arendst/Sono
 	 - `mqtt_port` - defaults to 1883, the example in the thread uses 1884  
 	 - `mqtt_user` - username for the MQTT broker  
 	 - `mqtt_password` - MQTT user's password  
+	 - `devfile` - Alternative to `devlist` option below - use the yaml file instead, start with `devices:` and then same syntax
 	 - `devlist` - You will need to put a JSON list of all your Sonoff devices and topics they listen to, for example:
 		- `[  {"id":  "sonoff1",  "type":  "switch",  "status_topic":  "stat/sonoff1/POWER",  "cmd_topic":  "cmnd/sonoff1/power"},  {"id":  "sonoff2",  "type":  "switch",  "status_topic":  "stat/sonoff2/POWER",  "cmd_topic":  "cmnd/sonoff2/power"}  ]`
 			- `"id":` ISY node ID - Can be anything you like, but ISY restricts to alphanumeric characters only and underline, no special characters, maximum 14 symbols.
