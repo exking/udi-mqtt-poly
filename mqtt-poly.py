@@ -79,7 +79,10 @@ class Controller(polyinterface.Controller):
             if 'id' not in dev or 'status_topic' not in dev or 'cmd_topic' not in dev or 'type' not in dev:
                 LOGGER.error('Invalid device definition: {}'.format(json.dumps(dev)))
                 continue
-            name = dev['id']
+            if 'name' in dev:
+                name = dev['name']
+            else:
+                name = dev['id']
             address = name.lower()[:14]
             if dev['type'] == 'switch':
                 if not address is self.nodes:
