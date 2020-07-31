@@ -83,7 +83,7 @@ class Controller(polyinterface.Controller):
                 name = dev['name']
             else:
                 name = dev['id']
-            address = name.lower()[:14]
+            address = dev['id'].lower().replace('_','')[:14]
             if dev['type'] == 'switch':
                 if not address is self.nodes:
                     LOGGER.info('Adding {} {}'.format(dev['type'], name))
