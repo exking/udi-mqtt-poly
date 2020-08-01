@@ -239,7 +239,7 @@ class MQSwitch(polyinterface.Node):
               ]
 
     id = 'MQSW'
-
+    hint = [4, 2, 0, 0]
     commands = {
             'QUERY': query, 'DON': set_on, 'DOF': set_off
                }
