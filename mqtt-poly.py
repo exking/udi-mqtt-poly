@@ -99,6 +99,11 @@ class Controller(polyinterface.Controller):
                     LOGGER.info('Adding {} {}'.format(dev['type'], name))
                     self.addNode(MQdht(self, self.address, address, name, dev))
                     self.status_topics.append(dev['status_topic'])
+            elif dev['type'] == 'Temp':
+                if not address is self.nodes:
+                    LOGGER.info('Adding {} {}'.format(dev['type'], name))
+                    self.addNode(MQds(self, self.address, address, name, dev))
+                    self.status_topics.append(dev['status_topic'])
             elif dev['type'] == 'TempHumidPress':
                 if not address is self.nodes:
                     LOGGER.info('Adding {} {}'.format(dev['type'], name))
@@ -398,6 +403,42 @@ class MQdht(polyinterface.Node):
             'QUERY': query
                }
 
+
+# This class is an attempt to add support for temperature only sensors.
+# was made for DS18B20 waterproof
+class MQds(polyinterface.Node):
+    def __init__(self, controller, primary, address, name, device):
+        super().__init__(controller, primary, address, name)
+        self.on = False
+
+    def start(self):
+        pass
+
+    def updateInfo(self, payload):
+        try:
+            data = json.loads(payload)
+        except Exception as ex:
+            LOGGER.error('Failed to parse MQTT Payload as Json: {} {}'.format(ex, payload))
+            return False
+        if 'DS18B20' in data:
+            self.setDriver('ST', 1)
+            self.setDriver('CLITEMP', data['DS18B20']['Temperature'])
+        else:
+            self.setDriver('ST', 0)
+
+    def query(self, command=None):
+        self.reportDrivers()
+
+    drivers = [{'driver': 'ST', 'value': 0, 'uom': 2},
+               {'driver': 'CLITEMP', 'value': 0, 'uom': 17}
+              ]
+
+    id = 'MQDS'
+
+    commands = {
+            'QUERY': query
+               }
+
 # This class is an attempt to add support for temperature/humidity/pressure sensors.
 # Currently supports the BME280.  Could be extended to accept others.
 class MQbme(polyinterface.Node):
@@ -478,7 +519,7 @@ class MQhcsr(polyinterface.Node):
                }
 
 # General purpose Analog input using ADC.
-# Setting max value in editor.xml as 1024, as that would be the max for 
+# Setting max value in editor.xml as 1024, as that would be the max for
 # onboard ADC, but that might need to be changed for external ADCs.
 class MQAnalog(polyinterface.Node):
     def __init__(self, controller, primary, address, name, device):

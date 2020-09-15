@@ -25,6 +25,7 @@ Note - your Sonoff MUST run the [Sonoff-Tasmota](https://github.com/arendst/Sono
 				- *switch* - For basic sonoff power switch.
 				- *sensor* - For nodemcu multisensor (see link in thread).
 				- *TempHumid* - For DHT21, DHT22, AM2301, AM2302, AM2321 sensors.
+				- *Temp* - For DS18B20 sensors.
 				- *TempHumidPress* - Supports the BME280 sensors.
 				- *distance* - Supports HC-SR04 Ultrasonic Sensor.
 				- *analog* - General purpose Analog input using onboard ADC.

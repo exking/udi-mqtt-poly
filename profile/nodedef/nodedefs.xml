@@ -76,6 +76,19 @@
             </accepts>
         </cmds>
     </nodeDef>
+    <nodeDef id="MQDS" nls="DS">
+        <editors />
+        <sts>
+            <st id="ST" editor="BOOL" />
+            <st id="CLITEMP" editor="TEMPF" />
+        </sts>
+	<cmds>
+	    <sends />
+            <accepts>
+                <cmd id="QUERY" />
+            </accepts>
+        </cmds>
+    </nodeDef>
     <nodeDef id="MQBME" nls="BME">
         <editors />
         <sts>
