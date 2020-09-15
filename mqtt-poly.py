@@ -403,6 +403,7 @@ class MQdht(polyinterface.Node):
             'QUERY': query
                }
 
+
 # This class is an attempt to add support for temperature only sensors.
 # was made for DS18B20 waterproof
 class MQds(polyinterface.Node):
