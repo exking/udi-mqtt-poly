@@ -46,6 +46,12 @@ ST-DHT-CLITEMP-NAME = Temperature
 ST-DHT-CLIHUM-NAME = Humidity
 ST-DHT-ST-NAME = Status
 
+# ds18b20
+ND-MQDS-NAME = MQTT DS18B20
+ND-MQDS-ICON = TempSensor
+ST-DS-CLITEMP-NAME = Temperature
+ST-DS-ST-NAME = Status
+
 # bme280
 ND-MQBME-NAME = MQTT BME
 ND-MQBME-ICON = TempSensor
