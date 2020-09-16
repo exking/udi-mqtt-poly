@@ -97,7 +97,7 @@ class Controller(polyinterface.Controller):
             elif dev['type'] == 'flag':
                 if not address is self.nodes:
                     LOGGER.info('Adding {} {}'.format(dev['type'], name))
-                    self.addNode(MQSensor(self, self.address, address, name, dev))
+                    self.addNode(MQFlag(self, self.address, address, name, dev))
                     self.status_topics.append(dev['status_topic'])
             elif dev['type'] == 'TempHumid':
                 if not address is self.nodes:
