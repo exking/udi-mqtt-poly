@@ -81,3 +81,16 @@ ST-S31-VOLT-NAME = Voltage
 ST-S31-FACTOR-NAME = Power Factor
 ST-S31-TOTPOW-NAME = Total Power
 ST-S31-ST-NAME = Status
+
+# flag
+ND-flag-NAME = MQTT FLAG
+ND-flag-ICON = Flag
+CMD-flag-QUERY-Name = Query
+CMD-flag-RESET-Name = Reset
+ST-flag-ST-NAME = Flag Status
+FLAG-0 = OK
+FLAG-1 = NOK
+FLAG-2 = LO
+FLAG-3 = HI
+FLAG-4 = ER
+

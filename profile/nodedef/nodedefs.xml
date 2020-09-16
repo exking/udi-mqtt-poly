@@ -147,4 +147,25 @@
             </accepts>
         </cmds>
     </nodeDef>
+    <nodeDef id="MQFLAG" nls="flag">
+        <editors />
+        <sts>
+            <st id="ST" editor="ST_FLAG" />
+        </sts>
+        <cmds>
+            <sends />
+            <accepts>
+                <cmd id="QUERY" />
+                <cmd id="RESET" />
+            </accepts>
+        </cmds>
+    </nodeDef>
 </nodeDefs>
+
+
+
+
+
+
+
+
