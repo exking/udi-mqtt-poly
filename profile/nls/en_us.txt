@@ -84,7 +84,7 @@ ST-S31-ST-NAME = Status
 
 # flag
 ND-MQFLAG-NAME = MQTT FLAG
-ND-MQFLAG-ICON = Flag
+ND-MQFLAG-ICON = GenericCtl
 CMD-FLAG-QUERY-Name = Query
 CMD-FLAG-RESET-Name = Reset
 ST-FLAG-ST-NAME = Flag Status
