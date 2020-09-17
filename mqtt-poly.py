@@ -376,7 +376,8 @@ class MQSensor(polyinterface.Node):
 class MQFlag(polyinterface.Node):
     def __init__(self, controller, primary, address, name, device):
         super().__init__(controller, primary, address, name)
-        self.on = False
+        self.cmd_topic = device['cmd_topic']
+
 
     def start(self):
         pass
