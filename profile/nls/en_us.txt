@@ -93,4 +93,3 @@ FLAG-1 = NOK
 FLAG-2 = LO
 FLAG-3 = HI
 FLAG-4 = ERR
-
