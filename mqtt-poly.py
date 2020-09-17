@@ -369,10 +369,10 @@ class MQSensor(polyinterface.Node):
 
 
     # this is meant as a flag for if you have a sensor or condition on your IOT device
-    # which you want the device program rather than the ISY to flag as OK, NOK, LO, HI, ER(ROR)
+    # which you want the device program rather than the ISY to flag as OK, NOK, LO, HI, ERR(OR)
     # payload is direct (like SW) not JSON encoded (like SENSOR)
     # example device: liquid float {OK, LO, HI}
-    # example condition: IOT devices sensor connections {OK, NOK, ER(ROR)}
+    # example condition: IOT devices sensor connections {OK, NOK, ERR(OR)}
 class MQFlag(polyinterface.Node):
     def __init__(self, controller, primary, address, name, device):
         super().__init__(controller, primary, address, name)
@@ -390,7 +390,7 @@ class MQFlag(polyinterface.Node):
             self.setDriver('ST', 2)
         elif payload == 'HI':
             self.setDriver('ST', 3)
-        elif payload == 'ER':
+        elif payload == 'ERR':
             self.setDriver('ST', 4)
         else:
             LOGGER.error('Invalid payload {}'.format(payload))
