@@ -24,6 +24,7 @@ Note - your Sonoff MUST run the [Sonoff-Tasmota](https://github.com/arendst/Sono
 			- `"type":` One of the following:
 				- *switch* - For basic sonoff power switch.
 				- *sensor* - For nodemcu multisensor (see link in thread).
+                - *flag* - For your device to send a condition to ISY {OK, NOK, LO, HI, ERR} 
 				- *TempHumid* - For DHT21, DHT22, AM2301, AM2302, AM2321 sensors.
 				- *Temp* - For DS18B20 sensors.
 				- *TempHumidPress* - Supports the BME280 sensors.

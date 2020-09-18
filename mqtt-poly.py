@@ -94,6 +94,11 @@ class Controller(polyinterface.Controller):
                     LOGGER.info('Adding {} {}'.format(dev['type'], name))
                     self.addNode(MQSensor(self, self.address, address, name, dev))
                     self.status_topics.append(dev['status_topic'])
+            elif dev['type'] == 'flag':
+                if not address is self.nodes:
+                    LOGGER.info('Adding {} {}'.format(dev['type'], name))
+                    self.addNode(MQFlag(self, self.address, address, name, dev))
+                    self.status_topics.append(dev['status_topic'])
             elif dev['type'] == 'TempHumid':
                 if not address is self.nodes:
                     LOGGER.info('Adding {} {}'.format(dev['type'], name))
@@ -360,6 +365,51 @@ class MQSensor(polyinterface.Node):
 
     commands = {
             'QUERY': query, 'DON': led_on, 'DOF': led_off, 'SETLED': led_set
+               }
+
+
+    # this is meant as a flag for if you have a sensor or condition on your IOT device
+    # which you want the device program rather than the ISY to flag as OK, NOK, LO, HI, ERR(OR)
+    # payload is direct (like SW) not JSON encoded (like SENSOR)
+    # example device: liquid float {OK, LO, HI}
+    # example condition: IOT devices sensor connections {OK, NOK, ERR(OR)}
+class MQFlag(polyinterface.Node):
+    def __init__(self, controller, primary, address, name, device):
+        super().__init__(controller, primary, address, name)
+        self.cmd_topic = device['cmd_topic']
+
+
+    def start(self):
+        pass
+
+    def updateInfo(self, payload):
+        if payload == 'OK':
+            self.setDriver('ST', 0)
+        elif payload == 'NOK':
+            self.setDriver('ST', 1)
+        elif payload == 'LO':
+            self.setDriver('ST', 2)
+        elif payload == 'HI':
+            self.setDriver('ST', 3)
+        elif payload == 'ERR':
+            self.setDriver('ST', 4)
+        else:
+            LOGGER.error('Invalid payload {}'.format(payload))
+
+    def reset_send(self, command):
+        self.controller.mqtt_pub(self.cmd_topic, 'RESET')
+
+    def query(self, command=None):
+        self.controller.mqtt_pub(self.cmd_topic, '')
+        self.reportDrivers()
+
+    drivers = [{'driver': 'ST', 'value': 0, 'uom': 25}
+              ]
+
+    id = 'MQFLAG'
+
+    commands = {
+            'QUERY': query, 'RESET': reset_send
                }
 
 
