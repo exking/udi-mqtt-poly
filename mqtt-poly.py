@@ -369,7 +369,19 @@ class MQSensor(polyinterface.Node):
 
 
     # this is meant as a flag for if you have a sensor or condition on your IOT device
-    # which you want the device program rather than the ISY to flag as OK, NOK, LO, HI, ERR(OR)
+    # which you want the device program rather than the ISY to flag
+    # FLAG-0 = OK
+    # FLAG-1 = NOK
+    # FLAG-2 = LO
+    # FLAG-3 = HI
+    # FLAG-4 = ERR
+    # FLAG-5 = IN
+    # FLAG-6 = OUT
+    # FLAG-7 = UP
+    # FLAG-8 = DOWN
+    # FLAG-9 = TRIGGER
+    # FLAG-10 = ON
+    # FLAG-11 = OFF
     # payload is direct (like SW) not JSON encoded (like SENSOR)
     # example device: liquid float {OK, LO, HI}
     # example condition: IOT devices sensor connections {OK, NOK, ERR(OR)}
@@ -391,10 +403,24 @@ class MQFlag(polyinterface.Node):
             self.setDriver('ST', 2)
         elif payload == 'HI':
             self.setDriver('ST', 3)
-        elif payload == 'ERR':
-            self.setDriver('ST', 4)
+        elif payload == 'IN':
+            self.setDriver('ST', 5)
+        elif payload == 'OUT':
+            self.setDriver('ST', 6)
+        elif payload == 'UP':
+            self.setDriver('ST', 7)
+        elif payload == 'DOWN':
+            self.setDriver('ST', 8)
+        elif payload == 'TRIGGER':
+            self.setDriver('ST', 9)
+        elif payload == 'ON':
+            self.setDriver('ST', 10)
+        elif payload == 'OFF':
+            self.setDriver('ST', 11)
         else:
             LOGGER.error('Invalid payload {}'.format(payload))
+            payload = 'ERR'
+            self.setDriver('ST', 4)
 
     def reset_send(self, command):
         self.controller.mqtt_pub(self.cmd_topic, 'RESET')
