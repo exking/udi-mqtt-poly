@@ -382,6 +382,7 @@ class MQSensor(polyinterface.Node):
     # FLAG-9 = TRIGGER
     # FLAG-10 = ON
     # FLAG-11 = OFF
+    # FLAG-12 = ---
     # payload is direct (like SW) not JSON encoded (like SENSOR)
     # example device: liquid float {OK, LO, HI}
     # example condition: IOT devices sensor connections {OK, NOK, ERR(OR)}
@@ -417,6 +418,8 @@ class MQFlag(polyinterface.Node):
             self.setDriver('ST', 10)
         elif payload == 'OFF':
             self.setDriver('ST', 11)
+        elif payload == '---':
+            self.setDriver('ST', 12)
         else:
             LOGGER.error('Invalid payload {}'.format(payload))
             payload = 'ERR'
