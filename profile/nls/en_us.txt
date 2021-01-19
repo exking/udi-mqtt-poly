@@ -82,8 +82,11 @@ ST-S31-TOTPOW-NAME = Total Power
 ST-S31-ST-NAME = Status
 
 # Raw
-ST-MQR-ST-NAME = Status
-ST-MQR-GV1-NAME = Raw Value
+ND-MQR-NAME = MQTT Raw
+ND-MQR-ICON = Input
+ST-RAW-ST-NAME = Status
+ST-RAW-GV1-NAME = Raw Value
+CMD-RAW-QUERY-NAME = Query
 
 # flag
 ND-MQFLAG-NAME = MQTT FLAG
