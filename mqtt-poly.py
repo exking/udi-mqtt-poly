@@ -706,7 +706,7 @@ class MQraw(polyinterface.Node):
                {'driver': 'GV1', 'value': 0, 'uom': 56}
               ]   
     
-    id = 'MQSR'
+    id = 'MQR'
     commands = {
             'QUERY': query
                }
