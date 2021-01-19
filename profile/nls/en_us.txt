@@ -7,7 +7,7 @@ ST-CTRL-ST-NAME = NodeServer Online
 # switch
 ND-MQSW-NAME = MQTT Switch
 ND-MQSW-ICON = GenericRsp
-
+ST-SWITCH-ST-NAME = Status
 CMD-SWITCH-DON-NAME = On
 CMD-SWITCH-DOF-NAME = Off
 
