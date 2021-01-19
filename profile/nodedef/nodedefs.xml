@@ -162,4 +162,18 @@
             </accepts>
         </cmds>
     </nodeDef>
+    <nodeDef id="MQR" nls="RAW">
+        <editors />
+        <sts>
+            <st id="ST" editor="ST_FLAG" />
+	    <st id="GV1" editor="ANALOG" />
+        </sts>
+        <cmds>
+            <sends>
+            </sends>
+            <accepts>
+                <cmd id="QUERY" />
+            </accepts>
+        </cmds>
+    </nodeDef>
 </nodeDefs>
