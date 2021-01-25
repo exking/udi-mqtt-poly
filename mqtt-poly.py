@@ -129,6 +129,11 @@ class Controller(polyinterface.Controller):
                     LOGGER.info('Adding {} {}'.format(dev['type'], name))
                     self.addNode(MQs31(self, self.address, address, name, dev))
                     self.status_topics.append(dev['status_topic'])
+            elif dev['type'] == 'raw':
+                if not address is self.nodes:
+                    LOGGER.info('Adding {} {}'.format(dev['type'], name))
+                    self.addNode(MQraw(self, self.address, address, name, dev))
+                    self.status_topics.append(dev['status_topic'])
             else:
                 LOGGER.error('Device type {} is not yet supported'.format(dev['type']))
         LOGGER.info('Done adding nodes, connecting to MQTT broker...')
@@ -678,7 +683,33 @@ class MQs31(polyinterface.Node):
             'QUERY': query
                }
 
+class MQraw(polyinterface.Node):
+    def __init__(self, controller, primary, address, name, device):
+        super().__init__(controller, primary, address, name)
+        self.cmd_topic = device['cmd_topic']
+        self.on = False
 
+    def start(self):
+        pass
+
+    def updateInfo(self, payload):
+        try :
+            self.setDriver('ST', 1)
+            self.setDriver('GV1', int(payload))
+        except Exception as ex :
+            LOGGER.error('Failed to parse MQTT Payload: {} {}'.format(ex, payload))
+
+    def query(self, command=None):
+        self.reportDrivers()
+
+    drivers = [{'driver': 'ST', 'value': 0, 'uom': 2},
+               {'driver': 'GV1', 'value': 0, 'uom': 56}
+              ]   
+    
+    id = 'MQR'
+    commands = {
+            'QUERY': query
+               }
 
 if __name__ == "__main__":
     try:

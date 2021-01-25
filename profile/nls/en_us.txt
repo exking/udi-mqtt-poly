@@ -82,6 +82,13 @@ ST-S31-FACTOR-NAME = Power Factor
 ST-S31-TOTPOW-NAME = Total Power
 ST-S31-ST-NAME = Status
 
+# Raw
+ND-MQR-NAME = MQTT Raw
+ND-MQR-ICON = Input
+ST-RAW-ST-NAME = Status
+ST-RAW-GV1-NAME = Raw Value
+CMD-RAW-QUERY-NAME = Query
+
 # flag
 ND-MQFLAG-NAME = MQTT FLAG
 ND-MQFLAG-ICON = GenericCtl
