@@ -31,6 +31,7 @@ Note - your Sonoff MUST run the [Sonoff-Tasmota](https://github.com/arendst/Sono
 				- *distance* - Supports HC-SR04 Ultrasonic Sensor.
 				- *analog* - General purpose Analog input using onboard ADC.
 				- *s31* - This is for the [Sonoff S31](https://www.itead.cc/sonoff-s31.html) energy monitoring (use switch type for control).
+				- *RGBW* - Control for a micro-controlled RGBW strip http://github.com/sejgit/shelfstrip
 			- `"status_topic":` - For switch this will be the cmnd topic (like `cmnd/sonoff1/power`), but on sensors this will be the telemetry topic (like `tele/sonoff/SENSOR`).
 			- `"cmd_topic":` - Is always required, even if the type doesn't support it (like a sensor).  Just enter a generic topic (`cmnd/sensor/POWER`).
 
