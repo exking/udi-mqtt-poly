@@ -157,6 +157,11 @@ class Controller(polyinterface.Controller):
                     LOGGER.info("Adding {} {}".format(dev["type"], name))
                     self.addNode(MQRGBWstrip(self, self.address, address, name, dev))
                     self.status_topics.append(dev["status_topic"])
+            elif dev["type"] == "ifan":
+                if not address is self.nodes:
+                    LOGGER.info("Adding {} {}".format(dev["type"], name))
+                    self.addNode(MQFan(self, self.address, address, name, dev))
+                    self.status_topics.append(dev["status_topic"])
             else:
                 LOGGER.error("Device type {} is not yet supported".format(dev["type"]))
         LOGGER.info("Done adding nodes, connecting to MQTT broker...")
@@ -284,6 +289,65 @@ class MQSwitch(polyinterface.Node):
     id = "MQSW"
     hint = [4, 2, 0, 0]
     commands = {"QUERY": query, "DON": set_on, "DOF": set_off}
+
+
+class MQFan(polyinterface.Node):
+    def __init__(self, controller, primary, address, name, device):
+        super().__init__(controller, primary, address, name)
+        self.cmd_topic = device["cmd_topic"]
+        self.fan_speed = 0
+
+    def start(self):
+        pass
+
+    def updateInfo(self, payload):
+        try:
+            json_payload = json.loads(payload)
+            fan_speed = int(json_payload['FanSpeed'])
+        except Exception as ex:
+            LOGGER.error(f"Could not decode payload {payload}: {ex}")
+        if 4 < fan_speed < 0:
+            LOGGER.error(f"Unexpected Fan Speed {fan_speed}")
+            return
+        if self.fan_speed == 0 and fan_speed > 0:
+            self.reportCmd("DON")
+        if self.fan_speed > 0 and fan_speed == 0:
+            self.reportCmd("DOF")
+        self.fan_speed = fan_speed
+        self.setDriver("ST", self.fan_speed)
+
+    def set_on(self, command):
+        try:
+            self.fan_speed = int(command.get('value'))
+        except Exception as ex:
+            LOGGER.info(f"Unexpected Fan Speed {ex}, assuming High")
+            self.fan_speed = 3
+        if 4 < self.fan_speed < 0:
+            LOGGER.error(f"Unexpected Fan Speed {self.fan_speed}, assuming High")
+            self.fan_speed = 3
+        self.setDriver("ST", self.fan_speed)
+        self.controller.mqtt_pub(self.cmd_topic, self.fan_speed)
+
+    def set_off(self, command):
+        self.fan_speed = 0
+        self.setDriver("ST", self.fan_speed)
+        self.controller.mqtt_pub(self.cmd_topic, self.fan_speed)
+
+    def speed_up(self, command):
+        self.controller.mqtt_pub(self.cmd_topic, "+")
+
+    def speed_down(self, command):
+        self.controller.mqtt_pub(self.cmd_topic, "-")
+
+    def query(self, command=None):
+        self.controller.mqtt_pub(self.cmd_topic, "")
+        self.reportDrivers()
+
+    drivers = [{"driver": "ST", "value": 0, "uom": 25}]
+
+    id = "MQFAN"
+    hint = [4, 2, 0, 0]
+    commands = {"QUERY": query, "DON": set_on, "DOF": set_off, "FDUP": speed_up, "FDDOWN": speed_down}
 
 
 class MQSensor(polyinterface.Node):

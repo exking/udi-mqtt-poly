@@ -28,6 +28,27 @@
             </accepts>
         </cmds>
     </nodeDef>
+    <nodeDef id="MQFAN" nls="IFAN">
+        <editors />
+        <sts>
+            <st id="ST" editor="ST_FAN" />
+        </sts>
+        <cmds>
+            <sends>
+                <cmd id="DON" />
+                <cmd id="DOF" />
+            </sends>
+            <accepts>
+                <cmd id="QUERY" />
+                <cmd id="DON" >
+                    <p id="" editor="ST_FAN" init="ST" />
+                </cmd>
+                <cmd id="DOF" />
+                <cmd id="FDUP" />
+                <cmd id="FDDOWN" />
+            </accepts>
+        </cmds>
+    </nodeDef>
     <nodeDef id="MQSENS" nls="SENSOR">
         <editors />
         <sts>
