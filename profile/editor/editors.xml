@@ -45,7 +45,7 @@
         <range uom="22" min="0" prec="3" />
     </editor>
     <editor id="ST_FLAG">
-        <range uom="25" subset="0-4" nls="FLAG" />
+        <range uom="25" subset="0-12" nls="FLAG" />
     </editor>
     <editor id="ST_FAN">
         <range uom="25" subset="0-3" nls="FANSPEED" />
