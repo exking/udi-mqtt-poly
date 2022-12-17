@@ -333,6 +333,21 @@ class MQFan(polyinterface.Node):
         self.setDriver("ST", self.fan_speed)
         self.controller.mqtt_pub(self.cmd_topic, self.fan_speed)
 
+    def set_low(self, command):
+        self.fan_speed = 1
+        self.setDriver("ST", self.fan_speed)
+        self.controller.mqtt_pub(self.cmd_topic, self.fan_speed)
+
+    def set_med(self, command):
+        self.fan_speed = 2
+        self.setDriver("ST", self.fan_speed)
+        self.controller.mqtt_pub(self.cmd_topic, self.fan_speed)
+
+    def set_high(self, command):
+        self.fan_speed = 3
+        self.setDriver("ST", self.fan_speed)
+        self.controller.mqtt_pub(self.cmd_topic, self.fan_speed)
+        
     def speed_up(self, command):
         self.controller.mqtt_pub(self.cmd_topic, "+")
 
