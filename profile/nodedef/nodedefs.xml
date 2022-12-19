@@ -46,6 +46,11 @@
                 <cmd id="DOF" />
                 <cmd id="FDUP" />
                 <cmd id="FDDOWN" />
+		<cmd id="FDDOWN" />
+                <cmd id="FDHIGH" />
+                <cmd id="FDMED" />
+                <cmd id="FDLOW" />
+
             </accepts>
         </cmds>
     </nodeDef>
